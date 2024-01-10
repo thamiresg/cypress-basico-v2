@@ -4,6 +4,8 @@
 
 /// <reference types="Cypress" />
 
+const { initial } = require("cypress/types/lodash")
+
 describe('Central de Atendimento ao Cliente TAT', function() {
     ///Antes de Cada Teste:
     beforeEach(function() {
@@ -91,7 +93,7 @@ describe('Central de Atendimento ao Cliente TAT', function() {
     })
 
     //Alterar o comando do botão de '' para 'cy.contains()' - Exercício Extra 08
-    it.only('alterar comando de ação do botão', function(){
+    it('alterar comando de ação do botão', function(){
         cy.get('#firstName').type('Thamires')
         cy.get('#lastName').type('Gualandi')
         cy.get('#email').type('thamiresgualandi@gmail.com')
@@ -99,5 +101,46 @@ describe('Central de Atendimento ao Cliente TAT', function() {
         cy.get('#check > [for="phone"]')
         cy.get('#phone').type('000000000')
         cy.contains('button', 'Enviar').click()
-    }) //Teste de commit 
+    })
+    
+    ///AULA 02: Selecionando opções em campos de seleção suspensa
+    
+    ///Selecionar um produto por seu texto - Exercício 01
+    it('seleciona um produto por seu texto', function(){
+        cy.get('#product').select('YouTube').should('have.value', 'youtube')
+    })
+
+    ///Selecionar um produto por seu valor (value) - Exercício Extra 01
+    it('seleciona um produto (Mentoria) por seu valor (value)', function(){
+        cy.get('#product').select('mentoria').should('have.value', 'mentoria')
+    })
+
+    ///Selecionar um produto (Blog) por seu índice - Exercício Extra 02
+    it('seleciona um produto (Blog) por seu índice', function(){
+        cy.get('#product').select(1).should('have.value', 'blog')
+    })
+
+    ///AULA 03: Selecionando opções em campos radio button
+
+    ///Marcar o tipo de atendimento "Feedback" - Exercício 01
+    it('marca o tipo de atendimento "Feedback"', function(){
+        cy.get('input[type="radio"][value="feedback"]').check().should('have.value', 'feedback')
+    })
+
+    ///Marcar cada tipo de atendimento - Exercício Extra 01 (Function não funciona)
+    it('marca cada tipo de atendimento', function(){
+        cy.get('input[type="radio"]')
+        .should('have.length', 3)
+        .each(function(radio){
+            cy.wrap(radio).check()
+            cy.wrap(radio).should('be.checked')
+        })
+    })
+
+    ///AULA 04: Marcar e Desmarcar Checkbox
+
+    ///Marcar ambos checkboxes, depois desmarca o último - Exercício 01
+    it.only('marca ambos checkboxes, depois desmarca o último', function(){
+        cy.get('input[type=checkbox').check()
+    })
   })
