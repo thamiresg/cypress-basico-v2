@@ -138,7 +138,65 @@ describe('Central de Atendimento ao Cliente TAT', function() {
     ///AULA 04: Marcar e Desmarcar Checkbox
 
     ///Marcar ambos checkboxes, depois desmarca o último - Exercício 01
-    it.only('marca ambos checkboxes, depois desmarca o último', function(){
-        cy.get('input[type=checkbox').check()
+    it('marca ambos checkboxes, depois desmarca o último', function(){
+        cy.get('input[type=checkbox').check().last().uncheck()
+        .should('not.be.checked')
+    })
+
+    ///Revisar cenário de marcar telefone para trocar o comando .clik para check - Exercício Extra 01
+    it('campo telefone obrigatorio mas nao preenchido', function(){
+        cy.get('#firstName').type('Fulana')
+        cy.get('#lastName').type('da Silva')
+        cy.get('#email').type('fulanadaSilva@teste.com')
+        cy.get('#phone-checkbox').check()
+        cy.contains('button', 'Enviar').click()
+    }) 
+
+    /// AULA 05: Fazer upload de arquivos usando cypress
+    
+    ///Selecionar um arquivo da pasta fixtures - Exercício 01
+    it('seleciona um arquivo da pasta fixtures', function(){
+        cy.get('input[type="file"]#file-upload')
+        .selectFile('cypress/fixtures/example.json')
+        .should(function(input){
+            expect(input[0].files[0].name).to.equal('example.json')
+        })
+    })
+
+    ///Selecionar um arquivo simulando um drag-and-drop - Exercício Extra 01
+    it('seleciona um arquivo simulando um drag-and-drop', function(){
+        cy.get('input[type="file"]#file-upload')
+        .selectFile('cypress/fixtures/example.json',{action:'drag-drop'}) ///drag-drop = ação de arrastar o arquivo
+        .should(function(input){
+            expect(input[0].files[0].name).to.equal('example.json')
+        })
+    })
+
+    ///Selecionar um arquivo utilizando uma fixture para a qual foi dada um alias - Exercício Extra 02
+    it('seleciona um arquivo utilizando uma fixture para a qual foi dada um alias', function(){
+        cy.fixture('example.json').as('sampleFile')
+        cy.get('input[type="file"]#file-upload')
+        .selectFile('@sampleFile')
+        .should(function(input){
+            expect(input[0].files[0].name).to.equal('example.json')
+        })
+    })
+
+    ///AULA 06: Lidando com links que abrem em outra aba
+
+    ///Verificar que a política de privacidade abre em outra aba - Exercício 01
+    it('verifica que a política de privacidade abre em outra aba', function(){
+        cy.get('#privacy a').should('have.attr', 'target', '_blank')
+    })
+
+    ///Acessar a página da política de privacidade removendo o target e então clicando no link - Exercício Extra 01
+    it('acessa a página da política de privacidade removendo o target e então clicando no link', function(){
+        cy.get('#privacy a').invoke('removeAttr', 'target').click()
+    })
+
+    ///Testar a página da política de privacidade de forma independente - Exercício Extra 02
+    it('testa a página da política de privacidade de forma independente', function(){
+        cy.get('#privacy a').invoke('removeAttr', 'target').click()
+        cy.contains('Talking About Testing').should('be.visible')
     })
   })
