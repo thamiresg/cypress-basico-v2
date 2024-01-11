@@ -4,8 +4,6 @@
 
 /// <reference types="Cypress" />
 
-const { initial } = require("cypress/types/lodash")
-
 describe('Central de Atendimento ao Cliente TAT', function() {
     ///Antes de Cada Teste:
     beforeEach(function() {
