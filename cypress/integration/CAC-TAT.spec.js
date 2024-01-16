@@ -5,6 +5,8 @@
 /// <reference types="Cypress" />
 
 describe('Central de Atendimento ao Cliente TAT', function() {
+    const THREE_SECONDS_IN_MS = 3000
+
     ///Antes de Cada Teste:
     beforeEach(function() {
         cy.visit('./src/index.html')  
@@ -199,4 +201,36 @@ describe('Central de Atendimento ao Cliente TAT', function() {
         cy.get('#privacy a').invoke('removeAttr', 'target').click()
         cy.contains('Talking About Testing').should('be.visible')
     })
+
+    ///AULA 11: Avançando com o cypress - Comandos cy.clock() e cy.tick()
+    it('preenche os campos obrigatórios e envia o formulário', function(){
+        cy.clock()
+
+        cy.get('#firstName').type('Thamires')
+        cy.get('#lastName').type('Gualandi')
+        cy.get('#email').type('thamiresgualandi@gmail.com')
+        cy.get('#open-text-area').type('Teste')
+        cy.get('button[type="submit"]').click()
+        cy.get('.success').should('be.visible','')
+
+        cy.tick(THREE_SECONDS_IN_MS)
+
+        cy.get('.success').should('not.be.visible')
+    })
+
+    it('exibe mensagem de erro ao submeter o formulário com um email com formatação inválida', function(){
+        cy. clock()
+
+        cy.get('#firstName').type('Fulana')
+        cy.get('#lastName').type('da Silva')
+        cy.get('#email').type('fulanadaSilva@teste,com')
+        cy.get('button[type="submit"]').click()
+        cy.get('.error').should('be.visible')
+        
+        cy.tick(THREE_SECONDS_IN_MS)
+
+        cy.get('.error').should('not.be.visible')
+    })
+
+    
   })
